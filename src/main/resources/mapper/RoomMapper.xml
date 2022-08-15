@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace为mapper接口的地址，mapper接口中的方法名和mapper.xml
+中定义的statement的id保持一致-->
+<mapper namespace="com.myhotel.mapper.RoomMapper">
+    <!--id:"接口中的方法名" parameterType:"传入的参数类型"
+    resultType:"返回实体类对象，使用包，类名"-->
+
+    <!--    添加房间-->
+    <insert id="AddRoom" parameterType="com.myhotel.pojo.Room">
+        INSERT INTO `room`
+        VALUES (#{id}, #{roomNumber}, #{roomType}, #{facility}, #{sex}, #{money}, #{briefly}, #{files}, #{conditions})
+    </insert>
+    <!--    根据房间号 查房间-->
+    <select id="FindRoomNumber" parameterType="java.lang.Integer" resultType="com.myhotel.pojo.Room">
+        select *
+        from room
+        where room_number = #{roomNumber}
+    </select>
+
+    <!--  更新-->
+    <update id="updateRoom" parameterType="com.myhotel.pojo.Room">
+        UPDATE room
+        <set>
+
+            <if test="roomType != null and roomType != ''">
+                room_type = #{roomType},
+            </if>
+            <if test="facility != null and facility != ''">
+                facility = #{facility},
+            </if>
+            <if test="sex!=null and sex!=''">
+                sex= #{sex},
+            </if>
+            <if test="money != null and money != '' ">
+                money = #{money},
+            </if>
+            <if test="briefly != null and briefly != '' ">
+                briefly = #{briefly},
+            </if>
+
+            files=#{files},
+            conditions=#{conditions}
+
+        </set>
+        <where>
+            room_number = #{roomNumber}
+        </where>
+
+    </update>
+
+    <!--    查找房间号-->
+    <select id="GetRoomNumber" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT room_number FROM `room`
+        <where>
+            <if test="roomNumber != '' and roomNumber != null ">
+                room_number = #{roomNumber}
+            </if>
+
+        </where>
+    </select>
+
+<!--    获取所用房间号-->
+    <select id="GetAllRoomNumber" resultType="java.lang.Integer">
+        SELECT room_number FROM `room`
+    </select>
+
+    <!--    获取房间-->
+    <select id="AllRoom" parameterType="com.myhotel.pojo.Room" resultType="com.myhotel.pojo.Room">
+        SELECT * FROM `room`
+        <where>
+            <if test="roomNumber !='' and roomNumber != null">
+                room_number = #{roomNumber}
+            </if>
+            <if test="roomType != null and roomType != ''">
+                and room_type = #{roomType}
+            </if>
+            <if test="facility != null and facility != ''">
+               and facility = #{facility}
+            </if>
+            <if test="sex!=null and sex!=''">
+                and sex= #{sex}
+            </if>
+            <if test="money != null and money != '' ">
+                and money = #{money}
+            </if>
+            <if test="conditions != null and conditions != '' ">
+                and conditions = #{conditions}
+            </if>
+
+        </where>
+    </select>
+
+    <!--    更新房间状态-->
+    <update id="UpdateConditions" parameterType="com.myhotel.pojo.Room">
+        UPDATE room set conditions=#{conditions} where room_number = #{roomNumber}
+    </update>
+
+    <!--    根据房间状态 获取不同状态的数量-->
+    <select id="GetConditionsList" parameterType="java.lang.Integer" resultType="com.myhotel.pojo.Room">
+        SELECT * FROM `room` WHERE conditions = #{conditions}
+    </select>
+
+    <!--    根据房间号获取价格房间类型-->
+    <select id="GetRoomByNumber" parameterType="java.lang.Integer" resultType="com.myhotel.pojo.Room">
+        SELECT room_type,money FROM `room` where room_number = #{roomNumber}
+    </select>
+
+
+</mapper>

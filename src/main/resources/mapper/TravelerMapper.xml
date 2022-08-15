@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace为mapper接口的地址，mapper接口中的方法名和mapper.xml
+中定义的statement的id保持一致-->
+<mapper namespace="com.myhotel.mapper.TravelerMapper">
+    <!--id:"接口中的方法名" parameterType:"传入的参数类型"
+    resultType:"返回实体类对象，使用包，类名"-->
+    <!--    添加-->
+    <insert id="insertPages" parameterType="com.myhotel.pojo.Traveler">
+        INSERT INTO `traveler`
+        VALUES (#{id}, #{roomNumber}, #{housingNowtime},
+                #{housingEndtime}, #{certificateType}, #{certificateNumber},
+                #{birthday}, #{sex}, #{username}, #{hometown}, #{nationvalue}, #{address},
+                #{phone}, #{guest}, #{healthy}, #{temperature}, #{route}, #{rent}, #{toll},
+                #{cart},#{checkout})
+    </insert>
+    <!--    姓名查找-->
+    <select id="AllTraveler" parameterType="java.lang.String" resultType="com.myhotel.pojo.Traveler">
+        select *
+        from `traveler`
+        WHERE username = #{username}
+
+    </select>
+
+    <select id="GetAllTraveler" parameterType="com.myhotel.pojo.Traveler" resultType="com.myhotel.pojo.Traveler">
+        select * from `traveler`
+        <where>
+            <if test="roomNumber != '' and roomNumber != null ">
+                room_number = #{roomNumber}
+            </if>
+            <if test="housingNowtime != '' and housingNowtime !=null ">
+                and housing_nowtime like concat ('%',#{housingNowtime},'%')
+            </if>
+            <if test="username != '' and username!=null ">
+                and username = #{username}
+            </if>
+            <if test="sex != null and sex !='' ">
+                and sex =#{sex}
+            </if>
+            <if test="healthy !='' and healthy != null">
+                and healthy = #{healthy}
+            </if>
+            <if test="rent!='' and rent!=null ">
+                and rent = #{rent}
+            </if>
+        </where>
+    </select>
+
+    <select id="GetCommonByNumber" parameterType="java.lang.Integer" resultType="java.lang.String">
+        SELECT username FROM `traveler` WHERE room_number = #{roomNumber}
+    </select>
+
+<!--    更改旅客退房状态-->
+    <update id="UpdateCheckout" parameterType="com.myhotel.pojo.Traveler">
+        update `traveler` set checkout = #{checkout} where username = #{username}
+    </update>
+
+<!--    通过房间号获取旅客性别列表-->
+    <select id="GetSexByNumber" parameterType="java.lang.Integer" resultType="com.myhotel.pojo.vo.SubTools">
+        SELECT sex,username FROM `traveler` WHERE room_number = #{roomNumber}
+    </select>
+<!--    删除所有旅客-->
+    <delete id="DeleteAll">
+        delete from traveler
+    </delete>
+
+</mapper>

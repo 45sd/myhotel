@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace为mapper接口的地址，mapper接口中的方法名和mapper.xml
+中定义的statement的id保持一致-->
+<mapper namespace="com.myhotel.mapper.UserMapper">
+    <!--id:"接口中的方法名" parameterType:"传入的参数类型"
+    resultType:"返回实体类对象，使用包，类名"-->
+    <select id="questsAll" parameterType="com.myhotel.pojo.User" resultType="com.myhotel.pojo.User">
+        SELECT * FROM `user` WHERE account =#{account}
+        </select>
+
+<!--    更新密码-->
+    <update id="UpdatePassword" parameterType="com.myhotel.pojo.User">
+        update user set password = #{password} where id = #{id}
+    </update>
+    <!-- 获取密码-->
+    <select id="GetPassword" parameterType="java.lang.Integer" resultType="java.lang.String">
+        select password from user where id =#{id}
+    </select>
+</mapper>
